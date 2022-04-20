@@ -1,0 +1,129 @@
+﻿@model IEnumerable<AhsanTest.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+
+}
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<h2>Index</h2>
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Search</label>
+                <input class="form-control" id="searchTxt" placeholder="Search Product Name" />
+            </div>
+        </div>
+        @*<div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Dropdown button
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </div>*@
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Action</label>
+                <div class="row">
+                    <div class="col-md-4 pr-0">
+                        <button class="btn btn-primary form-control" type="button" id="searchBtn">Search</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+<table id="tableContiner" class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th scope="col">@Html.DisplayNameFor(model => model.ProductName)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Size)</th>
+            <th scope="col">@Html.DisplayNameFor(model => model.Price)</th>
+            <th scope="col"> @Html.DisplayNameFor(model => model.MfgDate)</th>
+            <th scope="col"> @Html.DisplayNameFor(model => model.Category)</th>
+        </tr>
+    </thead>
+    <tbody class="test append_row">
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td hidden>
+                @Html.DisplayFor(modelItem => item.ProductId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MfgDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ProductId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+        </td>*@
+        </tr>
+        }
+
+
+    </tbody>
+</table>
+
+<script>
+    $("#searchBtn").click(function () {
+        debugger;
+		var searchValue = $("#searchTxt").val();
+
+		$.ajax({
+			url: '@Url.Action("Search", "Home")',
+			data: {
+				search: searchValue
+			}
+		})
+            .done(function (model) {
+                debugger;
+                JSON.stringify(model);
+             
+               
+                $(".append_row").empty();
+                for (var item of model) {
+                    $(".append_row").append(" <tr><td hidden>" + item.ProductId + "</td><td >" + item.ProductName + "</td><td >" + item.Size + "</td>"
+                        + "</td><td >" + item.Price + "</td>" + "</td><td >" + item.MfgDate  + "</td>" + "</td><td >" + item.Category + "</td>");
+                }
+            
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+        	alert("no DATA FOUNF");
+        });
+	});
+</script>
+
